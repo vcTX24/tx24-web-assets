@@ -584,6 +584,12 @@
     });
   }
 </script>
-
+<script>
+  window.addEventListener('load', function() {
+    window.parent.postMessage(
+      { iframeHeight: document.body.scrollHeight }, '*'
+    );
+  });
+</script>
 </body>
 </html>
