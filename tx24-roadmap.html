@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TX24 Roadmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green: #00E5A0;
+      --green-dim: rgba(0,229,160,0.13);
+      --green-border: rgba(0,229,160,0.32);
+      --amber: #F5A623;
+      --surface: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --text-primary: rgba(255,255,255,0.95);
+      --text-secondary: rgba(255,255,255,0.5);
+      --text-muted: rgba(255,255,255,0.28);
+      --bg: #0A0D12;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Syne', sans-serif;
+      color: var(--text-primary);
+      min-height: 100vh;
+    }
+
+    /* ── WRAP ── */
+    .roadmap-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 72px 40px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .roadmap-wrap::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -80px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(0,229,160,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .roadmap-wrap::after {
+      content: '';
+      position: absolute;
+      bottom: -100px; left: -60px;
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(74,144,226,0.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── HEADER ── */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--green);
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .tag::before {
+      content: '';
+      display: block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50%       { opacity: 0.35; transform: scale(0.65); }
+    }
+
+    h1 {
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 40%, rgba(255,255,255,0.38));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 15px;
+      color: var(--text-secondary);
+      margin-bottom: 48px;
+    }
+
+    /* ── STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 44px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .stat-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+    .stat-val {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+    .stat-val.green { color: var(--green); }
+    .stat-val.amber { color: var(--amber); }
+    .stat-val.white { color: var(--text-primary); }
+
+    /* ── FILTER TABS ── */
+    .filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .fbtn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+      padding: 7px 16px;
+      border-radius: 100px;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.2s;
+      outline: none;
+    }
+    .fbtn:hover {
+      border-color: rgba(255,255,255,0.2);
+      color: var(--text-primary);
+      background: var(--surface);
+    }
+    .fbtn.active {
+      background: var(--green-dim);
+      border-color: var(--green-border);
+      color: var(--green);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline { position: relative; }
+    .tl-line {
+      position: absolute;
+      left: 20px;
+      top: 14px;
+      bottom: 14px;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--green) 0%, rgba(0,229,160,0.12) 100%);
+    }
+
+    /* Year label */
+    .year-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-left: 52px;
+      margin-top: 24px;
+      margin-bottom: 10px;
+    }
+
+    /* Row */
+    .row {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 7px;
+      transition: opacity 0.28s;
+    }
+    .row.hidden { display: none; }
+
+    .dot-col {
+      flex-shrink: 0;
+      width: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 15px;
+    }
+
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      border: 1.5px solid var(--green);
+      background: var(--bg);
+      position: relative;
+      z-index: 1;
+      transition: all 0.2s;
+    }
+    .dot.done { background: var(--green); box-shadow: 0 0 0 3px rgba(0,229,160,0.15); }
+    .dot.key   {
+      width: 13px; height: 13px;
+      background: var(--green);
+      box-shadow: 0 0 0 5px rgba(0,229,160,0.2);
+    }
+
+    /* Card */
+    .card {
+      flex: 1;
+      background: var(--surface);
+      border: 0.5px solid var(--border);
+      border-radius: 11px;
+      padding: 15px 20px;
+      margin-bottom: 0;
+      transition: border-color 0.22s, transform 0.22s, background 0.22s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 11px;
+      background: linear-gradient(135deg, rgba(0,229,160,0.04), transparent);
+      opacity: 0;
+      transition: opacity 0.22s;
+    }
+    .card:hover::before { opacity: 1; }
+    .card:hover {
+      border-color: rgba(255,255,255,0.15);
+      transform: translateX(3px);
+    }
+    .card.key-card {
+      border-color: var(--green-border);
+      background: var(--green-dim);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 5px;
+    }
+    .card-date {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      color: var(--green);
+      white-space: nowrap;
+    }
+    .card-date.muted { color: var(--text-muted); }
+
+    .badge {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      padding: 3px 10px;
+      border-radius: 100px;
+      font-weight: 500;
+      background: var(--green-dim);
+      color: var(--green);
+      border: 0.5px solid var(--green-border);
+      white-space: nowrap;
+    }
+    .badge.milestone {
+      background: rgba(245,166,35,0.12);
+      color: var(--amber);
+      border-color: rgba(245,166,35,0.3);
+    }
+    .badge.partnership {
+      background: rgba(74,144,226,0.12);
+      color: #6aaff5;
+      border-color: rgba(74,144,226,0.3);
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--text-primary);
+    }
+    .card-title.muted {
+      color: var(--text-secondary);
+      font-weight: 400;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .roadmap-wrap { padding: 48px 20px 60px; }
+      h1 { font-size: 30px; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .stats .stat-card:last-child { grid-column: span 2; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="roadmap-wrap">
+
+  <!-- Header -->
+  <div class="tag">Achievements &amp; Roadmap</div>
+  <h1>TX24 · Official Timeline</h1>
+  <p class="subtitle">Complete milestone history from foundation to present</p>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-label">Founded</div>
+      <div class="stat-val green">2022</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Key milestones</div>
+      <div class="stat-val amber">12</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Engine speed</div>
+      <div class="stat-val white">300K+ TPS</div>
+    </div>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="filters">
+    <button class="fbtn active" onclick="filter('all', this)">All</button>
+    <button class="fbtn" onclick="filter('key', this)">Key milestones</button>
+    <button class="fbtn" onclick="filter('tech', this)">Tech</button>
+    <button class="fbtn" onclick="filter('legal', this)">Legal &amp; Licensing</button>
+    <button class="fbtn" onclick="filter('biz', this)">Business</button>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline">
+    <div class="tl-line"></div>
+
+    <!-- 2022 -->
+    <div class="year-label">2022</div>
+
+    <div class="row" data-cat="biz key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">01 / 2022</span><span class="badge milestone">Milestone</span></div>
+        <div class="card-title">Fundraising of 1,000,000€ from family and friends</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="biz">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">04 / 2022</span></div>
+        <div class="card-title muted">Relocation of CEO to Dubai as a mandatory resident</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">04 / 2022</span></div>
+        <div class="card-title muted">Company registration in Dubai — TXNET FZE (Dubai Silicon Oasis)</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">04 / 2022</span></div>
+        <div class="card-title muted">1st Matching engine development started · Frontend Mockup started · Backend &amp; IT Infrastructure started</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal biz">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">07 / 2022</span></div>
+        <div class="card-title muted">Dubai Trade license (15361) and office leasing — Dubai Silicon Oasis</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="biz">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">10 / 2022</span></div>
+        <div class="card-title muted">Dubai bank accounts open — MashreqBank</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">09 / 2022</span><span class="badge">Tech</span></div>
+        <div class="card-title">Matching engine v1 finished — 15kTx/s per pair (no dedicated hardware)</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">09 / 2022</span></div>
+        <div class="card-title muted">Frontend Mockup (MVP version) finished</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">10 / 2022</span></div>
+        <div class="card-title muted">2nd Matching engine version started · Frontend development (MVP) started</div>
+      </div>
+    </div>
+
+    <!-- 2023 -->
+    <div class="year-label">2023</div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">02 / 2023</span></div>
+        <div class="card-title muted">IT Infrastructure finished</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">06 / 2023</span><span class="badge">Legal</span></div>
+        <div class="card-title">Lithuania crypto license acquisition started</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">07 / 2023</span></div>
+        <div class="card-title muted">Data infrastructure development (MVP version) started</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">11 / 2023</span></div>
+        <div class="card-title muted">Data infrastructure development (MVP version) finished</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">12 / 2023</span></div>
+        <div class="card-title muted">European IP registration started</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">02 / 2023</span><span class="badge">Tech</span></div>
+        <div class="card-title">Matching engine v2 finished — ~300kTx/s per pair market (no dedicated hardware)</div>
+      </div>
+    </div>
+
+    <!-- 2024 -->
+    <div class="year-label">2024</div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">04 / 2024</span></div>
+        <div class="card-title muted">Backend development (MVP version) finished</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="biz">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">04 / 2024</span></div>
+        <div class="card-title muted">Lithuanian bank account open — Bilderlings Pay Ltd</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">05 / 2024</span></div>
+        <div class="card-title muted">Frontend development (MVP version) finished · MVP presented to shareholders</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">06 / 2024</span><span class="badge milestone">Milestone</span></div>
+        <div class="card-title">Lithuanian crypto license acquisition finished — mandatory enabler to start doing business</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">06 / 2024</span></div>
+        <div class="card-title muted">Lithuanian subsidiary TXNET UAB registration finished</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="tech key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">06 / 2024</span><span class="badge milestone">Milestone</span></div>
+        <div class="card-title">(MVP) DEMO Version launched</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="legal">
+      <div class="dot-col"><div class="dot done"></div></div>
+      <div class="card">
+        <div class="card-top"><span class="card-date muted">07 / 2024</span></div>
+        <div class="card-title muted">European IP registration finished — No 018992175</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="biz key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">09 / 2024</span><span class="badge">Token</span></div>
+        <div class="card-title">Coinstore TXT Token Launched</div>
+      </div>
+    </div>
+
+    <!-- 2025 -->
+    <div class="year-label">2025</div>
+
+    <div class="row" data-cat="biz key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">01 / 2025</span><span class="badge partnership">Partnership</span></div>
+        <div class="card-title">Victus Capital Token Investment Partnership</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="biz key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">03 / 2025</span><span class="badge partnership">Partnership</span></div>
+        <div class="card-title">Cequire Token Investment Partnership</div>
+      </div>
+    </div>
+
+    <div class="row" data-cat="biz key">
+      <div class="dot-col"><div class="dot key done"></div></div>
+      <div class="card key-card">
+        <div class="card-top"><span class="card-date">05 / 2025</span><span class="badge partnership">Partnership</span></div>
+        <div class="card-title">Rollman Management Token Investment Partnership</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function filter(cat, btn) {
+    document.querySelectorAll('.fbtn').forEach(function(b) {
+      b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    document.querySelectorAll('.row').forEach(function(row) {
+      if (cat === 'all') {
+        row.classList.remove('hidden');
+      } else {
+        var cats = (row.dataset.cat || '').split(' ');
+        row.classList.toggle('hidden', !cats.includes(cat));
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
